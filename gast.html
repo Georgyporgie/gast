@@ -43,9 +43,13 @@
           timeMessage.textContent = "Sapphire Live!";
           setBlink(true);
         } else if (hour >= 17 && hour < 21) {
-          img.src = 'images/DJ Saphire2.png';
-          timeMessage.textContent = "Sapphire Live!";
-          setBlink(true); // blink during evening live
+    img.src = 'images/DJ Saphire2.png';
+    timeMessage.textContent = "Sapphire Live!";
+    timeMessage.classList.add('blink'); // blink text
+} else {
+    timeMessage.classList.remove('blink'); // keep text steady
+}
+
         } else if (hour >= 21 && hour < 23) {
           img.src = 'images/Miss Chang.png';
           timeMessage.textContent = "Chang Again!";
@@ -83,3 +87,4 @@
   </script>
 </body>
 </html>
+
