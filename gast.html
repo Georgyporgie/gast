@@ -21,15 +21,17 @@
       const hour = now.getHours();
       const day = now.getDay();
 
-      // weekend logic: Saturday(6), Sunday(0), or Friday(5) after 18:00
-      const isWeekend = (day === 6 || day === 0) || (day === 5 && hour >= 18) || (day === 0 && hour < 21);
+      const isWeekend =
+        (day === 6 || day === 0) ||
+        (day === 5 && hour >= 18) ||
+        (day === 0 && hour < 21);
 
-      // helper: turn blink on/off
-      function setBlink(shouldBlink) {
+      // helper for blink control (text only)
+      function textBlink(shouldBlink) {
         if (shouldBlink) {
-          img.classList.add('blink');
+          timeMessage.classList.add('blink');
         } else {
-          img.classList.remove('blink');
+          timeMessage.classList.remove('blink');
         }
       }
 
@@ -37,54 +39,47 @@
         if (hour >= 7 && hour < 12) {
           img.src = 'images/aquarium3.gif'; 
           timeMessage.textContent = "Good morning!";
-          setBlink(false);
+          textBlink(false);
         } else if (hour >= 12 && hour < 17) {
           img.src = 'images/DJ Saphire good vibes.jpg';
           timeMessage.textContent = "Sapphire Live!";
-          setBlink(true);
+          textBlink(true);
         } else if (hour >= 17 && hour < 21) {
-    img.src = 'images/DJ Saphire2.png';
-    timeMessage.textContent = "Sapphire Live!";
-    timeMessage.classList.add('blink'); // blink text
-} else {
-    timeMessage.classList.remove('blink'); // keep text steady
-}
-
+          img.src = 'images/DJ Saphire2.png';
+          timeMessage.textContent = "Sapphire Live!";
+          textBlink(true);
         } else if (hour >= 21 && hour < 23) {
           img.src = 'images/Miss Chang.png';
           timeMessage.textContent = "Chang Again!";
-          setBlink(false);
+          textBlink(false);
         } else {
           img.src = 'images/aquarium.png';
           timeMessage.textContent = "Good Night!";
-          setBlink(false);
+          textBlink(false);
         }
       } else {
         if (hour >= 7 && hour < 12) {
           img.src = 'images/transparent.png';
           timeMessage.textContent = "Good morning!";
-          setBlink(false);
+          textBlink(false);
         } else if (hour >= 12 && hour < 17) {
           img.src = 'images/aquarium.png';
           timeMessage.textContent = "Afternoon vibes!";
-          setBlink(false);
+          textBlink(false);
         } else if (hour >= 17 && hour < 23) {
           img.src = 'images/transparent.png';
           timeMessage.textContent = "Evening mood!";
-          setBlink(true); // maybe blink in weekday evenings too
+          textBlink(true);
         } else {
           img.src = 'images/aquarium3.gif';
           timeMessage.textContent = "Night reflections!";
-          setBlink(false);
+          textBlink(false);
         }
       }
     }
 
-    // initial load
     window.onload = updateImage;
-    // update every hour
     setInterval(updateImage, 3600000);
   </script>
 </body>
 </html>
-
