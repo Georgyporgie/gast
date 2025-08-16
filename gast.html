@@ -73,8 +73,22 @@ window.onload = updateImage;
 setInterval(updateImage, 3600000);
 
 </script>
+
+if (hour >= 17 && hour < 21) {
+    img.src = 'images/DJ Saphire2.png';
+    img.classList.add('blink');
+    timeMessage.textContent = "Sapphire Live!";
+} else {
+    img.classList.remove('blink');
+}
+
+
+
+
+
 </body>
 
 
 
 </html>
+
