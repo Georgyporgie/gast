@@ -82,7 +82,7 @@
         } else if (hour >= 21 && hour < 23) {
           img.src = safeSrc('images/Miss Chang.png');
           timeMessage.textContent = "Chang Again!";
-          textBlink(true);
+          textBlink(false);
           djActive = true;
           console.log("🎬 Weekend late: Miss Chang.png, DJ active");
         } else {
@@ -130,5 +130,6 @@
   </script>
 </body>
 </html>
+
 
 
