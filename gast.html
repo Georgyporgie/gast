@@ -157,71 +157,78 @@
     setInterval(updateImage, 60000);
   </script>
 
-  <canvas id="clock" width="80" height="80"></canvas>
+<canvas id="clock" width="120" height="120"></canvas>
 
-  <script>
-    const canvas = document.getElementById("clock");
-    const ctx = canvas.getContext("2d");
-    const radius = canvas.width / 2;
-    ctx.translate(radius, radius);
+<script>
+const canvas = document.getElementById("clock");
+const ctx = canvas.getContext("2d");
+const radius = canvas.width / 2;
+ctx.translate(radius, radius);
 
-    function drawClock() {
-      ctx.clearRect(-radius, -radius, canvas.width, canvas.height);
+function drawJazzClock() {
+  ctx.clearRect(-radius, -radius, canvas.width, canvas.height);
 
-      ctx.beginPath();
-      ctx.arc(0, 0, radius - 2, 0, 2 * Math.PI);
-      ctx.fillStyle = "#111";
-      ctx.fill();
-      ctx.strokeStyle = "#0ff";
-      ctx.lineWidth = 2;
-      ctx.stroke();
+  // Clock face
+  ctx.beginPath();
+  ctx.arc(0, 0, radius - 4, 0, 2 * Math.PI);
+  ctx.fillStyle = "#fff";
+  ctx.fill();
+  ctx.strokeStyle = "#222";
+  ctx.lineWidth = 2;
+  ctx.stroke();
 
-      ctx.fillStyle = "#0ff";
-      ctx.font = `${radius * 0.25}px Arial`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      for (let num = 1; num <= 12; num++) {
-        let angle = (num * Math.PI) / 6;
-        ctx.rotate(angle);
-        ctx.translate(0, -radius * 0.75);
-        ctx.rotate(-angle);
-        ctx.fillText(num.toString(), 0, 0);
-        ctx.rotate(angle);
-        ctx.translate(0, radius * 0.75);
-        ctx.rotate(-angle);
-      }
+  // Roman numerals
+  const roman = ["XII", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI"];
+  ctx.fillStyle = "#000";
+  ctx.font = `${radius * 0.2}px Georgia`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
 
-      const now = new Date();
-      let hour = now.getHours() % 12;
-      let minute = now.getMinutes();
-      let second = now.getSeconds();
+  for (let i = 0; i < 12; i++) {
+    const angle = (i * Math.PI) / 6;
+    const x = Math.sin(angle) * (radius * 0.75);
+    const y = -Math.cos(angle) * (radius * 0.75);
+    ctx.fillText(roman[i], x, y);
+  }
 
-      drawHand((hour + minute / 60) * Math.PI / 6, radius * 0.5, 3, "#f0f");
-      drawHand((minute + second / 60) * Math.PI / 30, radius * 0.7, 2, "#0f0");
-      drawHand(second * Math.PI / 30, radius * 0.85, 1, "#ff0");
-    }
+  // "JAZZ" label
+  ctx.font = `${radius * 0.25}px Georgia`;
+  ctx.fillText("JAZZ", 0, radius * 0.5);
 
-    function drawHand(angle, length, width, color) {
-      ctx.beginPath();
-      ctx.lineWidth = width;
-      ctx.lineCap = "round";
-      ctx.strokeStyle = color;
-      ctx.moveTo(0, 0);
-      ctx.rotate(angle);
-      ctx.lineTo(0, -length);
-      ctx.stroke();
-      ctx.rotate(-angle);
-    }
+  // Time hands
+  const now = new Date();
+  const hour = now.getHours() % 12;
+  const minute = now.getMinutes();
+  const second = now.getSeconds();
 
-    function update() {
-      drawClock();
-      requestAnimationFrame(update);
-    }
-    update();
-  </script>
+  drawHand((hour + minute / 60) * Math.PI / 6, radius * 0.5, 4, "#000");
+  drawHand((minute + second / 60) * Math.PI / 30, radius * 0.7, 3, "#000");
+  drawHand(second * Math.PI / 30, radius * 0.85, 1, "#c00");
+}
+
+function drawHand(angle, length, width, color) {
+  ctx.beginPath();
+  ctx.lineWidth = width;
+  ctx.lineCap = "round";
+  ctx.strokeStyle = color;
+  ctx.moveTo(0, 0);
+  ctx.rotate(angle);
+  ctx.lineTo(0, -length);
+  ctx.stroke();
+  ctx.rotate(-angle);
+}
+
+function updateJazzClock() {
+  drawJazzClock();
+  requestAnimationFrame(updateJazzClock);
+}
+updateJazzClock();
+</script>
+
 
 </body>
 </html>
+
 
 
 
