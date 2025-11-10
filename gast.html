@@ -158,7 +158,6 @@
   </script>
 
 <canvas id="clock" width="120" height="120"></canvas>
-
 <script>
 const canvas = document.getElementById("clock");
 const ctx = canvas.getContext("2d");
@@ -168,66 +167,112 @@ ctx.translate(radius, radius);
 function drawJazzClock() {
   ctx.clearRect(-radius, -radius, canvas.width, canvas.height);
 
-  // Clock face
+  // Frame (gold rim)
   ctx.beginPath();
-  ctx.arc(0, 0, radius - 4, 0, 2 * Math.PI);
-  ctx.fillStyle = "#fff";
-  ctx.fill();
-  ctx.strokeStyle = "#222";
-  ctx.lineWidth = 2;
+  ctx.arc(0, 0, radius - 2, 0, Math.PI * 2);
+  ctx.strokeStyle = "#c79a36"; // warm gold
+  ctx.lineWidth = 4;
   ctx.stroke();
 
-  // Roman numerals
-  const roman = ["XII", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI"];
-  ctx.fillStyle = "#000";
-  ctx.font = `${radius * 0.2}px Georgia`;
+  // Teal parchment face (radial gradient)
+  const grad = ctx.createRadialGradient(0, 0, radius * 0.2, 0, 0, radius * 0.95);
+  grad.addColorStop(0, "#2aa6a6");   // inner teal
+  grad.addColorStop(0.7, "#1f7e7e"); // mid
+  grad.addColorStop(1, "#155e5e");   // outer teal
+  ctx.beginPath();
+  ctx.arc(0, 0, radius - 6, 0, Math.PI * 2);
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // Minute ticks (subtle gold)
+  ctx.strokeStyle = "rgba(199,154,54,0.6)";
+  for (let i = 0; i < 60; i++) {
+    const angle = (i * Math.PI) / 30;
+    const inner = i % 5 === 0 ? radius * 0.78 : radius * 0.82;
+    const outer = radius * 0.88;
+    ctx.beginPath();
+    ctx.lineWidth = i % 5 === 0 ? 2 : 1;
+    ctx.moveTo(inner * Math.sin(angle), -inner * Math.cos(angle));
+    ctx.lineTo(outer * Math.sin(angle), -outer * Math.cos(angle));
+    ctx.stroke();
+  }
+
+  // Roman numerals (gold serif)
+  const roman = ["XII","I","II","III","IV","V","VI","VII","VIII","IX","X","XI"];
+  ctx.fillStyle = "#e4c26b";
+  ctx.font = `${radius * 0.22}px Georgia`;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-
   for (let i = 0; i < 12; i++) {
     const angle = (i * Math.PI) / 6;
-    const x = Math.sin(angle) * (radius * 0.75);
-    const y = -Math.cos(angle) * (radius * 0.75);
+    const x = Math.sin(angle) * (radius * 0.65);
+    const y = -Math.cos(angle) * (radius * 0.65);
     ctx.fillText(roman[i], x, y);
   }
 
-  // "JAZZ" label
-  ctx.font = `${radius * 0.25}px Georgia`;
-  ctx.fillText("JAZZ", 0, radius * 0.5);
+  // "JAZZ" label (small gold)
+  ctx.font = `${radius * 0.20}px Georgia`;
+  ctx.fillStyle = "#d9b458";
+  ctx.fillText("JAZZ", 0, radius * 0.42);
 
-  // Time hands
+  // Center cap (gold)
+  ctx.beginPath();
+  ctx.arc(0, 0, 3, 0, Math.PI * 2);
+  ctx.fillStyle = "#c79a36";
+  ctx.fill();
+
+  // Time
   const now = new Date();
-  const hour = now.getHours() % 12;
-  const minute = now.getMinutes();
-  const second = now.getSeconds();
+  const h = now.getHours() % 12;
+  const m = now.getMinutes();
+  const s = now.getSeconds();
 
-  drawHand((hour + minute / 60) * Math.PI / 6, radius * 0.5, 4, "#000");
-  drawHand((minute + second / 60) * Math.PI / 30, radius * 0.7, 3, "#000");
-  drawHand(second * Math.PI / 30, radius * 0.85, 1, "#c00");
+  // Hands
+  drawHand((h + m / 60) * Math.PI / 6, radius * 0.50, 4, "#1a1a1a"); // hour (black)
+  drawHand((m + s / 60) * Math.PI / 30, radius * 0.72, 3, "#1a1a1a"); // minute (black)
+
+  // Second hand (deep red with counterweight)
+  const secAngle = s * Math.PI / 30;
+  ctx.save();
+  ctx.rotate(secAngle);
+  ctx.strokeStyle = "#b31212";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(0, 6);           // slight tail
+  ctx.lineTo(0, -radius * 0.80);
+  ctx.stroke();
+  // counterweight
+  ctx.beginPath();
+  ctx.arc(0, 10, 3, 0, Math.PI * 2);
+  ctx.fillStyle = "#b31212";
+  ctx.fill();
+  ctx.restore();
 }
 
 function drawHand(angle, length, width, color) {
+  ctx.save();
+  ctx.rotate(angle);
   ctx.beginPath();
   ctx.lineWidth = width;
   ctx.lineCap = "round";
   ctx.strokeStyle = color;
   ctx.moveTo(0, 0);
-  ctx.rotate(angle);
   ctx.lineTo(0, -length);
   ctx.stroke();
-  ctx.rotate(-angle);
+  ctx.restore();
 }
 
-function updateJazzClock() {
+function tick() {
   drawJazzClock();
-  requestAnimationFrame(updateJazzClock);
+  requestAnimationFrame(tick);
 }
-updateJazzClock();
+tick();
 </script>
 
 
 </body>
 </html>
+
 
 
 
