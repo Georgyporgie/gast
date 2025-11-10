@@ -144,13 +144,7 @@
       const lampSrc = djActive ? 'images/on air.gif' : 'images/on air.png';
       kroon.src = safeSrc(lampSrc);
 
-      // Toggle marquee animation
-      if (djActive) {
-        marquee.classList.add("active");
-      } else {
-        marquee.classList.remove("active");
-      }
-    }
+    
 
     window.addEventListener('load', updateImage);
     setInterval(updateImage, 60000);
@@ -221,6 +215,7 @@
 
 </body>
 </html>
+
 
 
 
