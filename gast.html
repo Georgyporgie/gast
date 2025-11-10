@@ -128,7 +128,7 @@
         } else if (hour >= 12 && hour < 17) {
           img.src = safeSrc('images/transparent.png');
           timeMessage.textContent = "";
-          djActive = false;
+          djActive = true;
         } else if (hour >= 17 && hour < 23) {
           img.src = safeSrc('images/transparent.png');
           timeMessage.textContent = "Evening mood!";
@@ -221,6 +221,7 @@
 
 </body>
 </html>
+
 
 
 
