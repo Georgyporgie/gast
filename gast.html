@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -62,6 +63,49 @@
       font-weight:bold;
       text-decoration:underline #FF0026;
     }
+     /* --- Program Oorkonde --- */
+    #programOorkonde {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px 30px;
+      background: #222;
+      border: 4px double #ff8c00;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255,140,0,0.6), inset 0 0 10px rgba(255,255,255,0.2);
+      text-align: center;
+      font-family: 'Georgia', serif;
+      color: #fff;
+    }
+
+    #programOorkonde h2 {
+      font-size: 26px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      background: linear-gradient(to right, #ff8c00, #ff69b4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    #programOorkonde ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    #programOorkonde li {
+      margin: 10px 0;
+      font-size: 18px;
+      line-height: 1.4;
+    }
+
+    #programOorkonde li.active {
+      background: linear-gradient(to right, #ff8c00, #ff69b4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: bold;
+      text-shadow: 0 0 10px rgba(255,140,0,0.8);
+    }
   </style>
 </head>
 <body>
@@ -77,7 +121,23 @@
   <br>
   <p id="timeMessage"></p>
 
-  <script>
+   <!-- Program Oorkonde -->
+  <div id="programOorkonde">
+    <h2>Today's Program</h2>
+    <ul>
+      <li data-start="3" data-end="12"><strong>3.00 am – 12.00 pm</strong>: Jazz Time!</li>
+      <li data-start="12" data-end="18"><strong>12.00 – 18.00</strong>: Come See The Eighties Disco!</li>
+      <li data-start="18" data-end="21"><strong>18.00 – 21.00</strong>: Jazz Time!</li>
+      
+      <li data-start="21" data-end="23"><strong>21.00 – 23.00</strong>: Special-show!</li>
+      
+      <li data-start="23" data-end="3"><strong>23.00 – 3.00 am</strong>: Come See The Seventies Disco!</li>
+    </ul>
+  </div>
+
+
+
+<script>
     function safeSrc(path) {
       return path.replace(/ /g, '%20');
     }
@@ -117,40 +177,76 @@
           timeMessage.textContent = "";
           djActive = true;
         } else {
-          img.src = safeSrc('images/aquarium.png');
+          img.src = safeSrc('images/aquarium3.gif');
           timeMessage.textContent = "Good night!";
           djActive = false;
         }
       } else {
         if (hour >= 7 && hour < 12) {
           img.src = safeSrc('images/transparent.png');
-          timeMessage.textContent = "Good morning!";
+          timeMessage.textContent = "";
           djActive = false;
         } else if (hour >= 12 && hour < 17) {
           img.src = safeSrc('images/transparent.png');
-          timeMessage.textContent = "Afternoon vibes";
+          timeMessage.textContent = "";
           djActive = false;
         } else if (hour >= 17 && hour < 23) {
-          img.src = safeSrc('images/aquarium3.gif');
-          timeMessage.textContent = "Evening mood!";
+          img.src = safeSrc('images/transparent.png');
+          timeMessage.textContent = "";
           djActive = false;
         } else {
-          img.src = safeSrc('images/aquarium.png');
+          img.src = safeSrc('images/aquarium3.gif');
           timeMessage.textContent = "Night reflections!";
           djActive = false;
         }
       }
+ // --- ON AIR lamp ---
+      kroon.src = djActive ? "images/on air.gif" : "images/on air.png";
 
-      // ON AIR lamp
-      const lampSrc = djActive ? 'images/on air.gif' : 'images/on air.png';
-      kroon.src = safeSrc(lampSrc);
-      // Toggle marquee animation
+      // --- Fade marquee in/out ---
       if (djActive) {
-        marquee.classList.add("active");
+        marquee.classList.add("visible");
       } else {
-        marquee.classList.remove("active");
+        marquee.classList.remove("visible");
       }
+
+      // --- Highlight current program ---
+      highlightProgram();
     }
+
+        function highlightProgram() {
+      const now = new Date();
+      const hour = now.getHours();
+      const items = document.querySelectorAll("#programOorkonde li");
+
+      items.forEach(li => {
+        const start = parseInt(li.dataset.start, 10);
+        const end = parseInt(li.dataset.end, 10);
+
+        let active = false;
+        if (start < end) {
+          // normal range (e.g. 12–14)
+          active = hour >= start && hour < end;
+        } else {
+          // overnight range (e.g. 21–3)
+          active = (hour >= start || hour < end);
+        }
+
+        li.classList.toggle("active", active);
+      });
+    }
+
+    window.addEventListener("load", () => {
+      updateImage();
+      highlightProgram();
+    });
+    setInterval(() => {
+      updateImage();
+      highlightProgram();
+    }, 60000); // update every minute
+
+
+
     
 
     window.addEventListener('load', updateImage);
