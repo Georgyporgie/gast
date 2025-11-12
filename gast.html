@@ -113,7 +113,7 @@
   <div class="top-bar">
     <img id="kroonImage" alt="ON AIR lamp">
     <div id="marquee"><span>Hallo henny geniet...</span></div>
-    <canvas id="clock" width="80" height="80"></canvas>
+    <canvas id="clock" width="120" height="120"></canvas>
   </div>
 
   <br><br> 
@@ -252,8 +252,6 @@
     window.addEventListener('load', updateImage);
     setInterval(updateImage, 60000);
   </script>
-
-<canvas id="clock" width="120" height="120"></canvas>
 <script>
 const canvas = document.getElementById("clock");
 const ctx = canvas.getContext("2d");
@@ -368,6 +366,7 @@ tick();
 
 </body>
 </html>
+
 
 
 
