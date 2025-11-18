@@ -193,7 +193,7 @@
         } else if (hour >= 17 && hour < 23) {
           img.src = safeSrc('images/transparent.png');
           timeMessage.textContent = "";
-          djActive = false;
+         djActive = true;
         } else {
           img.src = safeSrc('images/aquarium3.gif');
           timeMessage.textContent = "Night reflections!";
@@ -366,6 +366,7 @@ tick();
 
 </body>
 </html>
+
 
 
 
