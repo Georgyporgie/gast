@@ -359,112 +359,14 @@ function drawHand(angle, length, width, color) {
 
 function tick() {
   drawJazzClock();
-  updateStars();
-  drawStars();
   requestAnimationFrame(tick);
 }
 tick();
-
 </script>
- 
-  <script>
-  
-  function drawStar(x,y,r,color){
-      ctx.save();
-      ctx.translate(x,y);
-      ctx.beginPath();
-      ctx.fillStyle=color;
-      for(let i=0;i<5;i++){
-        const outerAngle=(18+i*72)/180*Math.PI;
-        const innerAngle=(54+i*72)/180*Math.PI;
-        ctx.lineTo(Math.cos(outerAngle)*r,-Math.sin(outerAngle)*r);
-        ctx.lineTo(Math.cos(innerAngle)*r*0.5,-Math.sin(innerAngle)*r*0.5);
-      }
-      ctx.closePath();
-      ctx.fill();
-      ctx.restore();
-    }
 
-    function ejectStars(){
-      const directions=[0,Math.PI/2,Math.PI,3*Math.PI/2]; // up, right, down, left
-      directions.forEach(angle=>{
-        stars.push({
-          x:0,y:0,
-          vx:Math.cos(angle)*2,
-          vy:Math.sin(angle)*2,
-          size:6,
-          color:"#ff0",
-          life:100
-        });
-      });
-    }
-
-    function updateStars(){
-      stars.forEach(star=>{
-        star.x+=star.vx;
-        star.y+=star.vy;
-        star.life--;
-      });
-      for(let i=stars.length-1;i>=0;i--){
-        if(stars[i].life<=0) stars.splice(i,1);
-      }
-    }
-
-    function drawStars(){
-      stars.forEach(star=>{
-        drawStar(radius+star.x,radius+star.y,star.size,star.color);
-      });
-    }
-
-    function checkQuarter(now){
-      if(now.getSeconds()===0 && now.getMinutes()%15===0){
-        ejectStars();
-      }
-    }
-
-  </script>
-
-<script>
-
-
-
-
-  function timeCheck(){
-  const now = new Date();
-
-  // Hourly emphasis (visual only)
-  if(now.getSeconds()===0 && now.getMinutes()===0){
-    ejectHourStars(); // big ring burst
-    console.log("🕛 Hourly starburst fired!");
-  }
-}
-
-// Run every second
-setInterval(timeCheck,1000);
-
-function ejectHourStars(){
-  for(let i=0;i<12;i++){
-    const angle = (i * Math.PI) / 6; // 12 directions
-    stars.push({
-      x:0, y:0,
-      vx:Math.cos(angle)*1.5,
-      vy:Math.sin(angle)*1.5,
-      size:8,
-      color:"#0ff",
-      life:120
-    });
-  }
-}
-
-</script>
 
 </body>
 </html>
-
-
-
-
-
 
 
 
