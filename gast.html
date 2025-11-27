@@ -364,10 +364,135 @@ function tick() {
 tick();
 </script>
 
+<script>
+/* --- STAR SYSTEM FOR QUARTER & HOURLY EFFECTS --- */
+
+let stars = [];
+let pulse = 0;       // for quarter-hour glow
+let pulseActive = false;
+
+function drawStar(x,y,r,color){
+  ctx.save();
+  ctx.translate(x,y);
+  ctx.beginPath();
+  ctx.fillStyle=color;
+  for(let i=0;i<5;i++){
+    const outerAngle=(18+i*72)/180*Math.PI;
+    const innerAngle=(54+i*72)/180*Math.PI;
+    ctx.lineTo(Math.cos(outerAngle)*r,-Math.sin(outerAngle)*r);
+    ctx.lineTo(Math.cos(innerAngle)*r*0.5,-Math.sin(innerAngle)*r*0.5);
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+/* --- Quarter-hour sparkle (4 directions) --- */
+function ejectQuarterStars(){
+  const dirs=[0,Math.PI/2,Math.PI,3*Math.PI/2];
+  dirs.forEach(angle=>{
+    stars.push({
+      x:0, y:0,
+      vx:Math.cos(angle)*2,
+      vy:Math.sin(angle)*2,
+      size:6,
+      color:"#ffd84d",
+      life:100
+    });
+  });
+
+  // trigger glow pulse
+  pulse = 1;
+  pulseActive = true;
+}
+
+/* --- Hourly ring burst (12 directions) --- */
+function ejectHourStars(){
+  for(let i=0;i<12;i++){
+    const angle=(i*Math.PI)/6;
+    stars.push({
+      x:0, y:0,
+      vx:Math.cos(angle)*1.5,
+      vy:Math.sin(angle)*1.5,
+      size:8,
+      color:"#4dffff",
+      life:120
+    });
+  }
+}
+
+/* --- Update star movement --- */
+function updateStars(){
+  stars.forEach(star=>{
+    star.x += star.vx;
+    star.y += star.vy;
+    star.life--;
+  });
+  stars = stars.filter(s => s.life > 0);
+
+  // fade pulse
+  if(pulseActive){
+    pulse -= 0.02;
+    if(pulse <= 0){
+      pulse = 0;
+      pulseActive = false;
+    }
+  }
+}
+
+/* --- Draw stars and quarter-hour glow --- */
+function drawStars(){
+  // quarter-hour glow
+  if(pulseActive){
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(0,0,radius-4,0,Math.PI*2);
+    ctx.strokeStyle = `rgba(255,220,120,${pulse})`;
+    ctx.lineWidth = 6;
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // stars
+  stars.forEach(star=>{
+    ctx.globalAlpha = star.life / 100;
+    drawStar(radius+star.x, radius+star.y, star.size, star.color);
+  });
+  ctx.globalAlpha = 1;
+}
+
+/* --- Time checks --- */
+function checkQuarter(){
+  const now = new Date();
+  if(now.getSeconds()===0 && now.getMinutes()%15===0){
+    ejectQuarterStars();
+  }
+}
+
+function checkHour(){
+  const now = new Date();
+  if(now.getSeconds()===0 && now.getMinutes()===0){
+    ejectHourStars();
+    console.log("🕛 Hourly starburst fired!");
+  }
+}
+
+setInterval(checkQuarter,1000);
+setInterval(checkHour,1000);
+
+/* --- Patch your tick() loop to include stars --- */
+const originalTick = tick;
+function tick(){
+  drawJazzClock();
+  updateStars();
+  drawStars();
+  requestAnimationFrame(tick);
+}
+tick();
+</script>
 
 </body>
 </html>
-
 
 
 
