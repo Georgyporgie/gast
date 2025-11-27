@@ -419,16 +419,6 @@ tick();
       }
     }
 
-    function updateClock(){
-  
-      requestAnimationFrame(updateClock);
-    }
-
-    if(document.readyState==="loading"){
-      document.addEventListener("DOMContentLoaded",updateClock);
-    } else {
-      updateClock();
-    }
   </script>
 
 <script>
@@ -467,6 +457,7 @@ function ejectHourStars(){
 
 </body>
 </html>
+
 
 
 
