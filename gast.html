@@ -359,9 +359,12 @@ function drawHand(angle, length, width, color) {
 
 function tick() {
   drawJazzClock();
+  updateStars();
+  drawStars();
   requestAnimationFrame(tick);
 }
 tick();
+
 </script>
  
   <script>
@@ -457,6 +460,7 @@ function ejectHourStars(){
 
 </body>
 </html>
+
 
 
 
