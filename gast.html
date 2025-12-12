@@ -270,44 +270,43 @@ const fridayProgram = [
       highlightProgram();
     }
 
-        function highlightProgram() {
-      const now = new Date();
-      const hour = now.getHours();
-      const items = document.querySelectorAll("#programOorkonde li");
+      function highlightProgram() {
+  const now = new Date();
+  const hour = now.getHours(); // current hour in 24h format (0–23)
+  const items = document.querySelectorAll("#programOorkonde li");
 
-      items.forEach(li => {
-        const start = parseInt(li.dataset.start, 10);
-        const end = parseInt(li.dataset.end, 10);
+  items.forEach(li => {
+    // Make sure your HTML has numeric hours like data-start="3" data-end="12"
+    const start = Number(li.dataset.start);
+    const end = Number(li.dataset.end);
 
-        let active = false;
-        if (start < end) {
-          // normal range (e.g. 12–14)
-          active = hour >= start && hour < end;
-        } else {
-          // overnight range (e.g. 21–3)
-          active = (hour >= start || hour < end);
-        }
-
-        li.classList.toggle("active", active);
-      });
+    let active = false;
+    if (start < end) {
+      // normal range (e.g. 12–14)
+      active = hour >= start && hour < end;
+    } else {
+      // overnight range (e.g. 21–3)
+      active = (hour >= start || hour < end);
     }
 
-    window.addEventListener("load", () => {
-      updateImage();
-      highlightProgram();
-    });
-    setInterval(() => {
-      updateImage();
-      highlightProgram();
-    }, 60000); // update every minute
+    if (active) {
+      li.classList.add("active");
+    } else {
+      li.classList.remove("active");
+    }
+  });
+}
 
-
-
-    
-
-    window.addEventListener('load', updateImage);
-    setInterval(updateImage, 60000);
-  </script>
+// Run once on load and then every minute
+window.addEventListener("load", () => {
+  updateImage();
+  highlightProgram();
+});
+setInterval(() => {
+  updateImage();
+  highlightProgram();
+}, 60000);
+</script>
 <script>
 const canvas = document.getElementById("clock");
 const ctx = canvas.getContext("2d");
@@ -548,6 +547,7 @@ tick();
 
 </body>
 </html>
+
 
 
 
