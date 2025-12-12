@@ -6,14 +6,10 @@
   <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
   <title>Beach Radio</title>
   <link rel="stylesheet" href="style3.css">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <style>
-        body { margin:0; font-family:sans-serif; background:#111; color:#fff; }
-    #kroonImage, #myImage { display: block; max-width: 100%; }
-
-    .blink { animation: blink 1s step-start infinite; }
-    @keyframes blink { 50% { opacity: 0; } }
-
+    body { margin:0; font-family:sans-serif; background:#111; color:#fff; }
+    #kroonImage, #myImage { display:block; max-width:100%; }
 
     .top-bar {
       display:flex;
@@ -22,7 +18,7 @@
       gap:10px;
       padding:8px 16px;
       background:linear-gradient(to bottom,#5C4033,#4B3621);
-      border-bottom: 4px solid #2F1B0C;
+      border-bottom:4px solid #2F1B0C;
       box-shadow:0 2px 6px rgba(0,0,0,0.4);
       color:#fff;
     }
@@ -46,11 +42,7 @@
       -webkit-text-fill-color:transparent;
       text-shadow:2px 2px 4px #ff69b4;
     }
-
-    /* Only animate when active */
-    #marquee.active span {
-      animation: marquee 8s linear infinite;
-    }
+    #marquee.active span { animation: marquee 8s linear infinite; }
 
     @keyframes marquee {
       0%   { left:100%; }
@@ -64,48 +56,38 @@
       font-weight:bold;
       text-decoration:underline #FF0026;
     }
-     /* --- Program Oorkonde --- */
+
+    /* --- Program Oorkonde --- */
     #programOorkonde {
-      max-width: 600px;
-      margin: 40px auto;
-      padding: 20px 30px;
-      background: #222;
-      border: 4px double #ff8c00;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(255,140,0,0.6), inset 0 0 10px rgba(255,255,255,0.2);
-      text-align: center;
-      font-family: 'Georgia', serif;
-      color: #fff;
+      max-width:600px;
+      margin:40px auto;
+      padding:20px 30px;
+      background:#222;
+      border:4px double #ff8c00;
+      border-radius:12px;
+      box-shadow:0 0 20px rgba(255,140,0,0.6), inset 0 0 10px rgba(255,255,255,0.2);
+      text-align:center;
+      font-family:'Georgia', serif;
+      color:#fff;
     }
-
     #programOorkonde h2 {
-      font-size: 26px;
-      margin-bottom: 16px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      background: linear-gradient(to right, #ff8c00, #ff69b4);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-size:26px;
+      margin-bottom:16px;
+      text-transform:uppercase;
+      letter-spacing:2px;
+      background:linear-gradient(to right,#ff8c00,#ff69b4);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
     }
-
-    #programOorkonde ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    #programOorkonde li {
-      margin: 10px 0;
-      font-size: 18px;
-      line-height: 1.4;
-    }
-
+    #programOorkonde ul { list-style:none; padding:0; margin:0; }
+    #programOorkonde li { margin:10px 0; font-size:18px; line-height:1.4; }
     #programOorkonde li.active {
-      background: linear-gradient(to right, #ff8c00, #ff69b4);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-weight: bold;
-      text-shadow: 0 0 10px rgba(255,140,0,0.8);
+      background-color:goldenrod;
+      color:white;
+      font-weight:bold;
+      border-radius:4px;
+      padding:4px;
+      transition:background-color 0.3s ease;
     }
   </style>
 </head>
@@ -117,79 +99,56 @@
     <canvas id="clock" width="80" height="80"></canvas>
   </div>
 
-  <br><br> 
-  <img id="myImage">
+  <br><br>
+  <img id="myImage" alt="DJ image">
   <br>
   <p id="timeMessage"></p>
 
-<!-- Program Oorkonde -->
-<div id="programOorkonde">
-  <h2>Today's Program</h2>
-  <ul id="programList"></ul>
-</div>
-
-<style>
-  #programOorkonde li.active {
-    background-color: goldenrod;
-    color: white;
-    font-weight: bold;
-    border-radius: 4px;
-    padding: 4px;
-    transition: background-color 0.3s ease;
-  }
-</style>
+  <!-- Program Oorkonde -->
+  <div id="programOorkonde">
+    <h2>Today's Program</h2>
+    <ul id="programList"></ul>
+  </div>
 
 <script>
-  // Weekday program (Mon–Thu)
+  // --- Programs ---
   const weekdayProgram = [
-    { start: 3, end: 12, text: "Jazz Time!" },
-    { start: 12, end: 17, text: "Eighties Are Alive!" },
-    { start: 17, end: 21, text: "Seventies Disco!" },
-    { start: 21, end: 23, text: "Jazz Experimental" },
-    { start: 23, end: 3, text: "Nineties Disco!" }
+    { start:3, end:12, text:"Jazz Time!" },
+    { start:12, end:17, text:"Eighties Are Alive!" },
+    { start:17, end:21, text:"Seventies Disco!" },
+    { start:21, end:23, text:"Jazz Experimental" },
+    { start:23, end:3, text:"Nineties Disco!" }
   ];
-
-  // Friday program
   const fridayProgram = [
-    { start: 3, end: 12, text: "Friday Morning Jazz" },
-    { start: 12, end: 18, text: "Friday Eighties Disco Marathon" },
-    { start: 18, end: 21, text: "Friday Seventies Groove" },
-    { start: 21, end: 23, text: "Soul Oldies Party!" },
-    { start: 23, end: 3, text: "Friday Night Nineties Party!" }
+    { start:3, end:12, text:"Friday Morning Jazz" },
+    { start:12, end:18, text:"Friday Eighties Disco Marathon" },
+    { start:18, end:21, text:"Friday Seventies Groove" },
+    { start:21, end:23, text:"Soul Oldies Party!" },
+    { start:23, end:3, text:"Friday Night Nineties Party!" }
   ];
-
-  // Saturday program
   const saturdayProgram = [
-    { start: 8, end: 12, text: "Lazy Saturday Jazz" },
-    { start: 12, end: 16, text: "Retro Brunch Beats" },
-    { start: 16, end: 20, text: "Saturday Seventies Groove" },
-    { start: 20, end: 23, text: "Big Saturday Special-show!" },
-    { start: 23, end: 5, text: "All-night Saturday Nineties Party!" }
+    { start:8, end:12, text:"Lazy Saturday Jazz" },
+    { start:12, end:16, text:"Retro Brunch Beats" },
+    { start:16, end:20, text:"Saturday Seventies Groove" },
+    { start:20, end:23, text:"Big Saturday Special-show!" },
+    { start:23, end:5, text:"All-night Saturday Nineties Party!" }
   ];
-
-  // Sunday program
   const sundayProgram = [
-    { start: 9, end: 12, text: "Sunday Smooth Jazz" },
-    { start: 12, end: 15, text: "Sunday Retro Chill" },
-    { start: 15, end: 19, text: "Sunday Seventies Soul" },
-    { start: 19, end: 22, text: "Sunday Special-show!" },
-    { start: 22, end: 3, text: "Sunday Night Nineties Disco!" }
+    { start:9, end:12, text:"Sunday Smooth Jazz" },
+    { start:12, end:15, text:"Sunday Retro Chill" },
+    { start:15, end:19, text:"Sunday Seventies Soul" },
+    { start:19, end:22, text:"Sunday Special-show!" },
+    { start:22, end:3, text:"Sunday Night Nineties Disco!" }
   ];
 
   function renderProgram() {
     const today = new Date();
-    const day = today.getDay(); // 0=Sunday, 5=Friday, 6=Saturday
+    const day = today.getDay();
     let program;
-
-    if (day === 5) {
-      program = fridayProgram;
-    } else if (day === 6) {
-      program = saturdayProgram;
-    } else if (day === 0) {
-      program = sundayProgram;
-    } else {
-      program = weekdayProgram;
-    }
+    if (day === 5) program = fridayProgram;
+    else if (day === 6) program = saturdayProgram;
+    else if (day === 0) program = sundayProgram;
+    else program = weekdayProgram;
 
     const programList = document.getElementById("programList");
     programList.innerHTML = "";
@@ -206,32 +165,86 @@
     const now = new Date();
     const hour = now.getHours();
     const items = document.querySelectorAll("#programOorkonde li");
-
     items.forEach(li => {
       const start = Number(li.dataset.start);
       const end = Number(li.dataset.end);
-
       let active = false;
-      if (start < end) {
-        active = hour >= start && hour < end;
-      } else {
-        active = (hour >= start || hour < end);
-      }
-
+      if (start < end) active = hour >= start && hour < end;
+      else active = (hour >= start || hour < end);
       li.classList.toggle("active", active);
     });
   }
 
+  function updateImage() {
+    const now = new Date();
+    const hour = now.getHours();
+    const day = now.getDay();
+    const kroon = document.getElementById("kroonImage");
+    const djImage = document.getElementById("myImage");
+    const timeMessage = document.getElementById("timeMessage");
+    const marquee = document.getElementById("marquee");
+
+    let djActive = false;
+    const isWeekend = (day === 5 && hour >= 18) || day === 6 || day === 0;
+
+    if (isWeekend) {
+      if (hour >= 7 && hour < 12) {
+        djImage.src = "images/aquarium3.gif";
+        timeMessage.textContent = "Good morning!";
+        djActive = true;
+      } else if (hour >= 12 && hour < 17) {
+        djImage.src = "images/Miss June.gif";
+        djActive = true;
+      } else if (hour >= 17 && hour < 21) {
+        djImage.src = "images/Miss Chang.png";
+        djActive = true;
+      } else if (hour >= 21 && hour < 23) {
+        djImage.src = "images/DJ Saphire good vibes.jpg";
+        djActive = true;
+      } else {
+        djImage.src = "images/aquarium3.gif";
+        timeMessage.textContent = "Good night!";
+        djActive = false;
+      }
+    } else {
+      if (hour >= 17 && hour < 23) {
+        djImage.src = "images/transparent.png";
+        djActive = true;
+      } else {
+        djImage.src = "images/aquarium3.gif";
+        timeMessage.textContent = "Night reflections!";
+        djActive = false;
+      }
+    }
+
+    // --- ON AIR lamp ---
+    kroon.src = djActive ? "images/on air.gif" : "images/on air.png";
+
+    // --- Fade marquee in/out ---
+    if (djActive) {
+      marquee.classList.add("active");
+    } else {
+      marquee.classList.remove("active");
+    }
+
+    // --- Highlight current program ---
+    highlightProgram();
+  }
+
+  // Run everything on load and every minute
   window.addEventListener("load", () => {
     renderProgram();
     highlightProgram();
+    updateImage();
   });
 
   setInterval(() => {
     renderProgram();
     highlightProgram();
+    updateImage();
   }, 60000);
 </script>
+
 
 
 
@@ -475,6 +488,7 @@ tick();
 
 </body>
 </html>
+
 
 
 
