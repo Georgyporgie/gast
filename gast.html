@@ -125,19 +125,8 @@
 <!-- Program Oorkonde -->
 <div id="programOorkonde">
   <h2>Today's Program</h2>
-  <ul>
-    <li data-start="3" data-end="12"><strong>3.00 – 12.00</strong>: Jazz Time!</li>
-    <li data-start="12" data-end="18"><strong>12.00 – 17.00</strong>: Come See The Eighties Disco!</li>
-    <li data-start="18" data-end="21"><strong>17.00 – 21.00</strong>: Come See The Seventies Disco!</li>
-    <li data-start="21" data-end="23"><strong>21.00 – 23.00</strong>: Special-show!</li>
-    <li data-start="23" data-end="3"><strong>23.00 – 3.00</strong>: Come See The Nineties Disco!</li>
-  </ul>
+  <ul id="programList"></ul>
 </div>
-
-<!-- Example images -->
-<img id="myImage" src="images/transparent.png" alt="program image">
-<img id="kroonImage" src="images/on air.png" alt="on air lamp">
-<div id="marquee">Weekend vibes rolling…</div>
 
 <style>
   #programOorkonde li.active {
@@ -148,91 +137,69 @@
     padding: 4px;
     transition: background-color 0.3s ease;
   }
-  #marquee {
-    opacity: 0;
-    transition: opacity 0.5s ease;
-  }
-  #marquee.visible {
-    opacity: 1;
-  }
 </style>
 
 <script>
-  function safeSrc(path) {
-    return path.replace(/ /g, '%20');
-  }
+  // Weekday program (Mon–Thu)
+  const weekdayProgram = [
+    { start: 3, end: 12, text: "Jazz Time!" },
+    { start: 12, end: 17, text: "Eighties Are Alive!" },
+    { start: 17, end: 21, text: "Seventies Disco!" },
+    { start: 21, end: 23, text: "Jazz Experimental" },
+    { start: 23, end: 3, text: "Nineties Disco!" }
+  ];
 
-  function updateImage() {
-    const timeMessage = document.getElementById("timeMessage");
-    const img = document.getElementById("myImage");
-    const kroon = document.getElementById("kroonImage");
-    const marquee = document.getElementById("marquee");
+  // Friday program
+  const fridayProgram = [
+    { start: 3, end: 12, text: "Friday Morning Jazz" },
+    { start: 12, end: 18, text: "Friday Eighties Disco Marathon" },
+    { start: 18, end: 21, text: "Friday Seventies Groove" },
+    { start: 21, end: 23, text: "Soul Oldies Party!" },
+    { start: 23, end: 3, text: "Friday Night Nineties Party!" }
+  ];
 
-    const now = new Date();
-    const hour = now.getHours();
-    const day = now.getDay();
+  // Saturday program
+  const saturdayProgram = [
+    { start: 8, end: 12, text: "Lazy Saturday Jazz" },
+    { start: 12, end: 16, text: "Retro Brunch Beats" },
+    { start: 16, end: 20, text: "Saturday Seventies Groove" },
+    { start: 20, end: 23, text: "Big Saturday Special-show!" },
+    { start: 23, end: 5, text: "All-night Saturday Nineties Party!" }
+  ];
 
-    const isWeekend =
-      (day === 6 || day === 0) ||
-      (day === 5 && hour >= 18) ||
-      (day === 0 && hour < 21);
+  // Sunday program
+  const sundayProgram = [
+    { start: 9, end: 12, text: "Sunday Smooth Jazz" },
+    { start: 12, end: 15, text: "Sunday Retro Chill" },
+    { start: 15, end: 19, text: "Sunday Seventies Soul" },
+    { start: 19, end: 22, text: "Sunday Special-show!" },
+    { start: 22, end: 3, text: "Sunday Night Nineties Disco!" }
+  ];
 
-    let djActive = false;
+  function renderProgram() {
+    const today = new Date();
+    const day = today.getDay(); // 0=Sunday, 5=Friday, 6=Saturday
+    let program;
 
-    if (isWeekend) {
-      if (hour >= 7 && hour < 12) {
-        img.src = safeSrc('images/aquarium3.gif');
-        timeMessage.textContent = "Good morning!";
-        djActive = true;
-      } else if (hour >= 12 && hour < 17) {
-        img.src = safeSrc('images/Miss June.gif');
-        timeMessage.textContent = "";
-        djActive = true;
-      } else if (hour >= 17 && hour < 21) {
-        img.src = safeSrc('images/Miss Chang.png');
-        timeMessage.textContent = "";
-        djActive = true;
-      } else if (hour >= 21 && hour < 23) {
-        img.src = safeSrc('images/DJ Saphire good vibes.jpg');
-        timeMessage.textContent = "";
-        djActive = true;
-      } else {
-        img.src = safeSrc('images/aquarium3.gif');
-        timeMessage.textContent = "Good night!";
-        djActive = false;
-      }
+    if (day === 5) {
+      program = fridayProgram;
+    } else if (day === 6) {
+      program = saturdayProgram;
+    } else if (day === 0) {
+      program = sundayProgram;
     } else {
-      if (hour >= 7 && hour < 12) {
-        img.src = safeSrc('images/transparent.png');
-        timeMessage.textContent = "";
-        djActive = false;
-      } else if (hour >= 12 && hour < 17) {
-        img.src = safeSrc('images/transparent.png');
-        timeMessage.textContent = "";
-        djActive = false;
-      } else if (hour >= 17 && hour < 23) {
-        img.src = safeSrc('images/transparent.png');
-        timeMessage.textContent = "";
-        djActive = true;
-      } else {
-        img.src = safeSrc('images/aquarium3.gif');
-        timeMessage.textContent = "Night reflections!";
-        djActive = false;
-      }
+      program = weekdayProgram;
     }
 
-    // --- ON AIR lamp ---
-    kroon.src = djActive ? "images/on air.gif" : "images/on air.png";
-
-    // --- Fade marquee in/out ---
-    if (djActive) {
-      marquee.classList.add("visible");
-    } else {
-      marquee.classList.remove("visible");
-    }
-
-    // --- Highlight current program ---
-    highlightProgram();
+    const programList = document.getElementById("programList");
+    programList.innerHTML = "";
+    program.forEach(slot => {
+      const li = document.createElement("li");
+      li.dataset.start = slot.start;
+      li.dataset.end = slot.end;
+      li.innerHTML = `<strong>${slot.start}:00 – ${slot.end}:00</strong>: ${slot.text}`;
+      programList.appendChild(li);
+    });
   }
 
   function highlightProgram() {
@@ -246,10 +213,8 @@
 
       let active = false;
       if (start < end) {
-        // normal range (e.g. 12–14)
         active = hour >= start && hour < end;
       } else {
-        // overnight range (e.g. 21–3)
         active = (hour >= start || hour < end);
       }
 
@@ -258,14 +223,17 @@
   }
 
   window.addEventListener("load", () => {
-    updateImage();
+    renderProgram();
     highlightProgram();
   });
+
   setInterval(() => {
-    updateImage();
+    renderProgram();
     highlightProgram();
-  }, 60000); // update every minute
+  }, 60000);
 </script>
+
+
 
 <script>
 const canvas = document.getElementById("clock");
@@ -507,6 +475,7 @@ tick();
 
 </body>
 </html>
+
 
 
 
