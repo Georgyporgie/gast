@@ -220,12 +220,12 @@
     // --- ON AIR lamp ---
     kroon.src = djActive ? "images/on air.gif" : "images/on air.png";
 
-    // --- Fade marquee in/out ---
-    if (djActive) {
-      marquee.classList.add("active");
-    } else {
-      marquee.classList.remove("active");
-    }
+   // --- Fade marquee in/out ---
+if (isWeekend) {
+  marquee.classList.add("active");
+} else {
+  marquee.classList.remove("active");
+}
 
     // --- Highlight current program ---
     highlightProgram();
@@ -488,6 +488,7 @@ tick();
 
 </body>
 </html>
+
 
 
 
