@@ -93,49 +93,7 @@
 </head>
 
   
-  <script>
-  
-  function updateMarquee() {
-  const marqueeSpan = document.querySelector("#marquee span");
-  const day = new Date().getDay(); // 0=Sun, 1=Mon, ... 6=Sat
-
-  let message = "";
-
-  switch (day) {
-    case 1: // Monday
-      message = "Happy Monday! Start your week with Beach Radio!";
-      break;
-    case 2: // Tuesday
-      message = "Tuesday Tunes — keep the rhythm alive!";
-      break;
-    case 3: // Wednesday
-      message = "Midweek Magic — enjoy the beats!";
-      break;
-    case 4: // Thursday
-      message = "Thursday Grooves — almost weekend!";
-      break;
-    case 5: // Friday
-      message = "Friday Fiesta! Weekend starts here!";
-      break;
-    case 6: // Saturday
-      message = "Super Saturday — Dance all day!";
-      break;
-    case 0: // Sunday
-      message = "Smooth Sunday — relax with Beach Radio!";
-      break;
-  }
-
-  marqueeSpan.textContent = message;
-
-  // fade in animation
-  const marquee = document.getElementById("marquee");
-  setTimeout(() => marquee.classList.add("active"), 200);
-}
-
-updateMarquee();
-</script>
-  
-  
+ 
   
   
   
@@ -300,7 +258,49 @@ if (isWeekend) {
 </script>
 
 
+ <script>
+  
+  function updateMarquee() {
+  const marqueeSpan = document.querySelector("#marquee span");
+  const day = new Date().getDay(); // 0=Sun, 1=Mon, ... 6=Sat
 
+  let message = "";
+
+  switch (day) {
+    case 1: // Monday
+      message = "Happy Monday! Start your week with Beach Radio!";
+      break;
+    case 2: // Tuesday
+      message = "Tuesday Tunes — keep the rhythm alive!";
+      break;
+    case 3: // Wednesday
+      message = "Midweek Magic — enjoy the beats!";
+      break;
+    case 4: // Thursday
+      message = "Thursday Grooves — almost weekend!";
+      break;
+    case 5: // Friday
+      message = "Friday Fiesta! Weekend starts here!";
+      break;
+    case 6: // Saturday
+      message = "Super Saturday — Dance all day!";
+      break;
+    case 0: // Sunday
+      message = "Smooth Sunday — relax with Beach Radio!";
+      break;
+  }
+
+  marqueeSpan.textContent = message;
+
+  // fade in animation
+  const marquee = document.getElementById("marquee");
+  setTimeout(() => marquee.classList.add("active"), 200);
+}
+
+updateMarquee();
+</script>
+  
+  
 
 <script>
 const canvas = document.getElementById("clock");
@@ -542,6 +542,7 @@ tick();
 
 </body>
 </html>
+
 
 
 
