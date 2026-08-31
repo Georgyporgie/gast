@@ -10,7 +10,7 @@
   display:block;
   width: 175px;
   margin: auto auto auto auto;
-
+will-change: transform;
   overflow: hidden;
   white-space: nowrap;
 }
@@ -20,7 +20,7 @@
   position: relative; color:#050202;
   left: 100%;background-color: #FFCC99;
 
-  animation: marquee 8s linear infinite;
+  animation: marquee 6s linear infinite;
 
 }
 
